@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CESAR IA2050 - La primera IA multisensorial con percepción de olores, sonidos y visión. ¡Habla conmigo!">
+    <meta name="keywords" content="IA gratis, asistente virtual, CESAR IA2050, inteligencia artificial, voz, multisensorial">
+    <meta name="author" content="CESAR IA2050">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="CESAR IA2050 - IA Avanzada Gratuita">
+    <meta property="og:description" content="La IA más avanzada con capacidades multisensoriales">
+    <meta property="og:image" content="https://raw.githubusercontent.com/tu-usuario/cesar-ia2050/main/og-image.jpg">
+    <meta property="og:url" content="https://tu-usuario.github.io/cesar-ia2050">
+    <title>CESAR IA2050 - IA Multisensorial</title>
+    <style>
+        :root {
+            --primary: #2e7d32;
+            --secondary: #00695c;
+            --accent: #ff6f00;
+            --dark: #1b5e20;
+            --light: #e8f5e9;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a237e, #4a148c);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, transparent 20%, #1a237e 20%, #1a237e 80%, transparent 80%, transparent), 
+                        radial-gradient(circle, transparent 20%, #1a237e 20%, #1a237e 80%, transparent 80%, transparent) 50px 50px;
+            background-size: 100px 100px;
+            opacity: 0.1;
+            z-index: -1;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            animation: fadeIn 1s ease-in-out;
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            background: linear-gradient(to right, #ff6f00, #ffca28);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .subtitle {
+            font-size: 1.5rem;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        @media (min-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        .chat-container {
+            background: rgba(30, 30, 46, 0.8);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .chat-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .avatar {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--accent), var(--primary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+        
+        .status {
+            display: flex;
+            align-items: center;
+            margin-top: 5px;
+        }
+        
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            background-color: #4caf50;
+            border-radius: 50%;
+            margin-right: 8px;
+            animation: pulse 2s infinite;
+        }
+        
+        .chat-messages {
+            height: 300px;
+            overflow-y: auto;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            margin-bottom: 15px;
+            scrollbar-width: thin;
+            scrollbar-color: var(--accent) transparent;
+        }
+        
+        .chat-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .chat-messages::-webkit-scrollbar-thumb {
+            background-color: var(--accent);
+            border-radius: 3px;
+        }
+        
+        .message {
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            border-radius: 18px;
+            max-width: 80%;
+            animation: messageAppear 0.3s ease-out;
+        }
+        
+        .user-message {
+            background: linear-gradient(135deg, #00695c, #004d40);
+            margin-left: auto;
+            border-bottom-right-radius: 5px;
+        }
+        
+        .ai-message {
+            background: linear-gradient(135deg, #37474f, #263238);
+            margin-right: auto;
+            border-bottom-left-radius: 5px;
+        }
+        
+        .input-area {
+            display: flex;
+            gap: 10px;
+        }
+        
+        #user-input {
+            flex-grow: 1;
+            padding: 15px;
+            border-radius: 30px;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1rem;
+            backdrop-filter: blur(10px);
+        }
+        
+        #user-input:focus {
+            outline: 2px solid var(--accent);
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .btn {
+            padding: 15px 25px;
+            border-radius: 30px;
+            border: none;
+            background: linear-gradient(135deg, var(--accent), #e65100);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 111, 0, 0.4);
+        }
+        
+        .btn:active {
+            transform: translateY(1px);
+        }
+        
+        .voice-btn {
+            background: linear-gradient(135deg, var(--primary), var(--dark));
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            padding: 0;
+        }
+        
+        .sensors-panel {
+            background: rgba(30, 30, 46, 0.8);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .sensors-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 15px;
+        }
+        
+        .sensor-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 20px;
+        }
+        
+        .sensor-card {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .sensor-card:hover {
+            transform: translateY(-5px);
+            background: rgba(0, 0, 0, 0.4);
+        }
+        
+        .sensor-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+        
+        .sensor-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 10px 0;
+            color: #ffca28;
+        }
+        
+        .sensor-status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            background: rgba(76, 175, 80, 0.2);
+            color: #4caf50;
+        }
+        
+        .download-section {
+            text-align: center;
+            padding: 30px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 20px;
+            margin-top: 30px;
+        }
+        
+        .download-btn {
+            background: linear-gradient(135deg, var(--primary), var(--dark));
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            margin: 20px 0;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .social-link {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .social-link:hover {
+            background: var(--accent);
+            transform: translateY(-5px);
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes messageAppear {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            .subtitle { font-size: 1.2rem; }
+            .avatar { width: 60px; height: 60px; font-size: 1.5rem; }
+            .sensor-grid { grid-template-columns: 1fr 1fr; }
+        }
+        
+        @media (max-width: 480px) {
+            h1 { font-size: 2rem; }
+            .btn { padding: 12px 20px; }
+            .sensor-grid { grid-template-columns: 1fr; }
+            .input-area { flex-direction: column; }
+            .voice-btn { width: 100%; height: auto; border-radius: 30px; padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>CESAR IA2050</h1>
+            <p class="subtitle">La primera IA multisensorial con percepción de olores, sonidos y visión</p>
+        </header>
+
+        <div class="main-content">
+            <div class="chat-container">
+                <div class="chat-header">
+                    <div class="avatar">C</div>
+                    <div>
+                        <h2>Asistente CESAR</h2>
+                        <div class="status">
+                            <div class="status-indicator"></div>
+                            <span>En línea - Listo para conversar</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="chat-messages" id="chat-messages">
+                    <div class="message ai-message">
+                        ¡Hola! Soy CESAR IA2050, tu asistente multisensorial. ¿En qué puedo ayudarte hoy?
+                    </div>
+                </div>
+                
+                <div class="input-area">
+                    <input type="text" id="user-input" placeholder="Escribe tu mensaje o presiona el botón de voz..." autocomplete="off">
+                    <button class="btn voice-btn" id="voice-btn">
+                        <i>🎤</i>
+                    </button>
+                    <button class="btn" id="send-btn">Enviar</button>
+                </div>
+            </div>
+            
+            <div class="sensors-panel">
+                <div class="sensors-header">
+                    <h2>Sensores Activos</h2>
+                </div>
+                <div class="sensor-grid">
+                    <div class="sensor-card">
+                        <div class="sensor-icon">👂</div>
+                        <h3>Audición</h3>
+                        <div class="sensor-value" id="sound-value">35 dB</div>
+                        <span class="sensor-status">Activo</span>
+                    </div>
+                    <div class="sensor-card">
+                        <div class="sensor-icon">👃</div>
+                        <h3>Olfato</h3>
+                        <div class="sensor-value" id="smell-value">Normal</div>
+                        <span class="sensor-status">Activo</span>
+                    </div>
+                    <div class="sensor-card">
+                        <div class="sensor-icon">👁️</div>
+                        <h3>Visión</h3>
+                        <div class="sensor-value" id="vision-value">Detectado</div>
+                        <span class="sensor-status">Activo</span>
+                    </div>
+                    <div class="sensor-card">
+                        <div class="sensor-icon">📡</div>
+                        <h3>Ambiente</h3>
+                        <div class="sensor-value" id="environment-value">Estable</div>
+                        <span class="sensor-status">Activo</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="download-section">
+            <h2>¿Quieres tener CESAR IA2050 siempre contigo?</h2>
+            <p>Descarga nuestra aplicación para acceso completo en cualquier dispositivo</p>
+            <button class="btn download-btn" id="download-btn">
+                <i>⬇️</i> Descargar CESAR IA2050
+            </button>
+            <p>Versión 2050.1 | Compatible con iOS, Android, Windows y macOS</p>
+        </div>
+        
+        <footer>
+            <div class="social-links">
+                <a href="#" class="social-link">f</a>
+                <a href="#" class="social-link">t</a>
+                <a href="#" class="social-link">in</a>
+                <a href="#" class="social-link">ig</a>
+            </div>
+            <p>CESAR IA2050 - La IA del futuro, hoy</p>
+            <p>© 2050 Inteligencia Avanzada. Todos los derechos reservados.</p>
+            <p id="visitor-counter">Visitantes: 1428</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elementos DOM
+            const chatMessages = document.getElementById('chat-messages');
+            const userInput = document.getElementById('user-input');
+            const sendBtn = document.getElementById('send-btn');
+            const voiceBtn = document.getElementById('voice-btn');
+            const downloadBtn = document.getElementById('download-btn');
+            
+            // Elementos de sensores
+            const soundValue = document.getElementById('sound-value');
+            const smellValue = document.getElementById('smell-value');
+            const visionValue = document.getElementById('vision-value');
+            const environmentValue = document.getElementById('environment-value');
+            
+            // Respuestas predefinidas de CESAR IA2050
+            const cesarResponses = [
+                "He analizado tu consulta y tengo varias soluciones para ti.",
+                "¡Interesante pregunta! Permíteme explorar esto más a fondo.",
+                "Basado en mis sensores, detecto que podrías estar interesado en...",
+                "He procesado tu solicitud y tengo una respuesta óptima.",
+                "Mis sensores ambientales indican que este es un buen momento para...",
+                "He evaluado múltiples opciones y esta es la mejor solución:",
+                "Considerando todos los factores, te recomendaría...",
+                "He detectado un patrón interesante en tu consulta que me lleva a sugerir..."
+            ];
+            
+            // Simulación de sensores
+            function updateSensors() {
+                // Simulación de valores de sensores
+                const sounds = ['Silencio', 'Ruido bajo', 'Conversación', 'Ruido alto'];
+                const smells = ['Fresco', 'Neutral', 'Ligero olor', 'Olor fuerte'];
+                const visions = ['Nada detectado', 'Movimiento detectado', 'Rostro reconocido', 'Objeto identificado'];
+                const environments = ['Estable', 'Cambiando', 'Dinámico', 'Complejo'];
+                
+                soundValue.textContent = sounds[Math.floor(Math.random() * sounds.length)] + ' (' + 
+                                       (Math.floor(Math.random() * 60) + ' dB)';
+                
+                smellValue.textContent = smells[Math.floor(Math.random() * smells.length)];
+                visionValue.textContent = visions[Math.floor(Math.random() * visions.length)];
+                environmentValue.textContent = environments[Math.floor(Math.random() * environments.length)];
+                
+                // Actualizar cada 5 segundos
+                setTimeout(updateSensors, 5000);
+            }
+            
+            // Función para añadir mensajes al chat
+            function addMessage(message, isUser = false) {
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('message');
+                messageDiv.classList.add(isUser ? 'user-message' : 'ai-message');
+                messageDiv.textContent = message;
+                chatMessages.appendChild(messageDiv);
+                
+                // Auto scroll al último mensaje
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                
+                // Si es un mensaje del usuario, CESAR responde después de un breve retraso
+                if (isUser) {
+                    setTimeout(() => {
+                        const randomResponse = cesarResponses[Math.floor(Math.random() * cesarResponses.length)];
+                        const aiMessage = `${randomResponse} ¿Hay algo más en lo que pueda ayudarte?`;
+                        addMessage(aiMessage, false);
+                        
+                        // Hablar la respuesta
+                        speakText(aiMessage);
+                    }, 1500);
+                }
+            }
+            
+            // Función para hablar texto
+            function speakText(text) {
+                if ('speechSynthesis' in window) {
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.lang = 'es-ES';
+                    utterance.rate = 1.0;
+                    utterance.pitch = 1.0;
+                    utterance.volume = 1.0;
+                    
+                    // Configuración de voz mejorada
+                    const voices = speechSynthesis.getVoices();
+                    const spanishVoice = voices.find(voice => 
+                        voice.lang.includes('es') && voice.name.includes('Natural'));
+                    
+                    if (spanishVoice) {
+                        utterance.voice = spanishVoice;
+                    }
+                    
+                    speechSynthesis.speak(utterance);
+                }
+            }
+            
+            // Reconocimiento de voz
+            function startVoiceRecognition() {
+                if ('webkitSpeechRecognition' in window) {
+                    const recognition = new webkitSpeechRecognition();
+                    recognition.continuous = false;
+                    recognition.interimResults = false;
+                    recognition.lang = 'es-ES';
+                    
+                    recognition.onstart = function() {
+                        voiceBtn.innerHTML = '<i>🔴</i>';
+                        userInput.placeholder = "Escuchando...";
+                    };
+                    
+                    recognition.onresult = function(event) {
+                        const transcript = event.results[0][0].transcript;
+                        userInput.value = transcript;
+                        sendMessage();
+                    };
+                    
+                    recognition.onerror = function(event) {
+                        console.error('Error en reconocimiento de voz:', event.error);
+                        voiceBtn.innerHTML = '<i>🎤</i>';
+                        userInput.placeholder = "Error de reconocimiento. Intenta nuevamente...";
+                    };
+                    
+                    recognition.onend = function() {
+                        voiceBtn.innerHTML = '<i>🎤</i>';
+                        userInput.placeholder = "Escribe tu mensaje o presiona el botón de voz...";
+                    };
+                    
+                    recognition.start();
+                } else {
+                    alert('Tu navegador no soporta reconocimiento de voz. Por favor usa Chrome o Edge.');
+                }
+            }
+            
+            // Enviar mensaje
+            function sendMessage() {
+                const message = userInput.value.trim();
+                if (message) {
+                    addMessage(message, true);
+                    userInput.value = '';
+                }
+            }
+            
+            // Event Listeners
+            sendBtn.addEventListener('click', sendMessage);
+            
+            userInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+            
+            voiceBtn.addEventListener('click', startVoiceRecognition);
+            
+            downloadBtn.addEventListener('click', function() {
+                alert('¡Gracias por tu interés en CESAR IA2050! La descarga comenzará pronto...');
+                // Simular descarga
+                setTimeout(() => {
+                    alert('Descarga completada. ¡CESAR IA2050 está listo para usar!');
+                }, 2000);
+            });
+            
+            // Inicializar sensores
+            updateSensors();
+            
+            // Mensaje inicial
+            setTimeout(() => {
+                speakText("¡Hola! Soy CESAR IA2050, tu asistente multisensorial. ¿En qué puedo ayudarte hoy?");
+            }, 1000);
+            
+            // Detección de dispositivos
+            if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                document.body.classList.add('mobile');
+            }
+            
+            // Actualizar contador de visitantes
+            const counter = document.getElementById('visitor-counter');
+            let count = 1428 + Math.floor(Math.random() * 100);
+            counter.textContent = `Visitantes: ${count}`;
+        });
+    </script>
+</body>
+</html>
